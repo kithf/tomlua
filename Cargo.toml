@@ -1,0 +1,44 @@
+[package]
+name = "tomlua"
+authors = ["kithf <code-kithf@proton.me>"]
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "tomlua"
+crate-type = ["cdylib"]
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+opt-level = "s"
+
+[profile.dev]
+incremental = true
+strip = false
+lto = false
+opt-level = 0
+
+[profile.dev.package."*"]
+opt-level = 0
+incremental = true
+
+[profile.dev.build-override]
+opt-level = 0
+incremental = true
+
+[features]
+lua54 = ["mlua/lua54"]
+lua53 = ["mlua/lua53"]
+lua52 = ["mlua/lua52"]
+lua51 = ["mlua/lua51"]
+luajit52 = ["mlua/luajit52"]
+luajit = ["mlua/luajit"]
+luau = ["mlua/luau"]
+vendored = ["mlua/vendored"]
+
+[dependencies]
+mlua = { version = "0.8.1", features = ["module", "serialize", "send"]}
+serde = "1.0.139"
+toml_edit = { version = "0.14.4", features = ["serde", "easy"] }

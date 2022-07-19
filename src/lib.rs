@@ -1,5 +1,4 @@
 use mlua::{Lua, Result, Table, Value as LValue, Error, LuaSerdeExt, Nil, ExternalError};
-use toml_edit::easy::Value as TValue;
 
 fn decode<'a>(lua: &'a Lua, val: LValue<'a>) -> Result<LValue<'a>> {
   let val = match val {
@@ -7,7 +6,7 @@ fn decode<'a>(lua: &'a Lua, val: LValue<'a>) -> Result<LValue<'a>> {
     _ => Err(format!("Expected string, got {}", val.type_name()).to_lua_err()),
   }?;
 
-  let doc = toml_edit::de::from_str::<TValue>(&val)
+  let doc = toml_edit::de::from_str::<toml_edit::easy::Value>(&val)
     .map_err(|e| Error::external(e.to_string()))?;
   lua.to_value(&doc)
 }
